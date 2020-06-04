@@ -73,13 +73,13 @@ import { Car, cars as cars_list } from './cars';
   app.get( "/cars/", ( req: Request, res: Response ) => {
     let { make } = req.query;
 
-    if ( !make ) {
-      return res.status(400)
-        .send(`name is required`);
+    if ( make ) {
+      return res.status(200)
+        .send(cars.filter(car => car.make === make));
     }
 
     return res.status(200)
-      .send(cars.filter(car => car.make === make));
+      .send(cars);
   } );
 
   // @TODO Add an endpoint to get a specific car
@@ -93,8 +93,14 @@ import { Car, cars as cars_list } from './cars';
         .send(`name is required`);
     }
 
+    const car = cars.filter(car => car.id === id)
+
+    if (car && car.length === 0) {
+      return res.status(404).send('car is not found');
+    }
+
     return res.status(200)
-      .send(cars.filter(car => car.id === id));
+      .send(car);
   })
 
   /// @TODO Add an endpoint to post a new car to our list
