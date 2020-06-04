@@ -86,21 +86,20 @@ import { Car, cars as cars_list } from './cars';
   // it should require id
   // it should fail gracefully if no matching car is found
   app.get("/cars/:id", ( req: Request, res: Response ) => {
-    let { id } = req.query;
+    let { id } = req.params;
 
     if ( !id ) {
       return res.status(400)
-        .send(`name is required`);
+        .send(`id is required`);
     }
 
-    const car = cars.filter(car => car.id === id)
+    const car = cars.filter(car => car.id === parseInt(id, 10))
 
     if (car && car.length === 0) {
       return res.status(404).send('car is not found');
     }
 
-    return res.status(200)
-      .send(car);
+    return res.status(200).send(car);
   })
 
   /// @TODO Add an endpoint to post a new car to our list
